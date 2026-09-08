@@ -1,74 +1,12 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IN — Make New York yours.</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">IN</div>
-        <h1>Something is happening.</h1>
-      </div>
-      <button class="ghost" id="createOpen">CREATE AN IN</button>
-    </header>
-
-    <section class="hero-copy">
-      <p>Plans from people you know — and people you're connected to.</p>
-    </section>
-
-    <section id="feed" class="feed"></section>
-  </main>
-
-  <dialog id="createDialog" class="modal">
-    <form method="dialog" class="modal-card" id="createForm">
-      <div class="modal-head">
-        <div>
-          <div class="eyebrow">CREATE AN IN</div>
-          <h2>What are you doing?</h2>
-        </div>
-        <button class="icon-btn" value="cancel" aria-label="Close">×</button>
-      </div>
-      <textarea id="planText" placeholder="Barry's UES at 11 then Pura Vida after. Anyone want to come?" required></textarea>
-      <div class="field-row">
-        <label>Date & time<input id="planWhen" type="datetime-local" required /></label>
-        <label>Meeting point<input id="planPlace" type="text" placeholder="Barry's UES" required /></label>
-      </div>
-      <label>Who can see it?
-        <select id="planRadius">
-          <option value="1">My direct INs</option>
-          <option value="2" selected>Friends of my INs</option>
-          <option value="3">Extended IN</option>
-        </select>
-      </label>
-      <button class="primary wide" type="submit">POST THE IN</button>
-    </form>
-  </dialog>
-
-  <dialog id="eventDialog" class="modal">
-    <section class="modal-card event-detail" id="eventDetail"></section>
-  </dialog>
-
-  <template id="eventCardTemplate">
-    <article class="event-card">
-      <div class="event-meta"><span class="event-time"></span><span class="distance"></span></div>
-      <h2 class="event-title"></h2>
-      <p class="event-desc"></p>
-      <div class="organizer-row">
-        <div class="avatar"></div>
-        <div><strong class="organizer"></strong><div class="connection"></div></div>
-      </div>
-      <div class="attendees"></div>
-      <div class="card-actions">
-        <button class="primary join-btn">I'M IN</button>
-        <button class="text-btn details-btn">VIEW IN →</button>
-      </div>
-    </article>
-  </template>
-
-  <script src="app.js"></script>
-</body>
-</html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>IN — Make New York yours.</title><link rel="stylesheet" href="styles.css"/></head>
+<body><main class="app-shell">
+<header class="topbar"><div><div class="eyebrow">IN</div><h1>Something is happening.</h1></div><button class="ghost" id="createOpen">CREATE AN IN</button></header>
+<section class="hero-copy"><p>Plans from people you know — and people you're connected to. Whatever you're into, somebody is probably already doing it.</p></section>
+<section class="interest-zone"><div class="interest-head"><div><div class="eyebrow">EXPLORE YOUR WORLD</div><h3>What are you into?</h3></div><button class="text-btn" id="clearInterests">SHOW EVERYTHING</button></div><div id="interestFilters" class="interest-filters"></div><div class="tiny interest-note">Interests shape what you see. They don't box you in — IN will still surface good plans outside your usual world.</div></section>
+<section id="feed" class="feed"></section></main>
+<dialog id="createDialog" class="modal"><form method="dialog" class="modal-card" id="createForm"><div class="modal-head"><div><div class="eyebrow">CREATE AN IN</div><h2>What are you doing?</h2></div><button class="icon-btn" value="cancel" aria-label="Close">×</button></div><textarea id="planText" placeholder="Church Sunday at 10:30 then boozy brunch after. Come for either or both." required></textarea><div class="field-row"><label>Date & time<input id="planWhen" type="datetime-local" required/></label><label>Meeting point<input id="planPlace" type="text" placeholder="Where are you starting?" required/></label></div><label>What kind of IN is this?<div id="createInterests" class="interest-filters create-tags"></div></label><label>Who can see it?<select id="planRadius"><option value="1">My direct INs</option><option value="2" selected>Friends of my INs</option><option value="3">Extended IN</option></select></label><button class="primary wide" type="submit">POST THE IN</button></form></dialog>
+<dialog id="eventDialog" class="modal"><section class="modal-card event-detail" id="eventDetail"></section></dialog>
+<template id="eventCardTemplate"><article class="event-card"><div class="event-meta"><span class="event-time"></span><span class="distance"></span></div><div class="event-tags"></div><h2 class="event-title"></h2><p class="event-desc"></p><div class="organizer-row"><div class="avatar"></div><div><strong class="organizer"></strong><div class="connection"></div></div></div><div class="attendees"></div><div class="card-actions"><button class="primary join-btn">I'M IN</button><button class="text-btn details-btn">VIEW IN →</button></div></article></template>
+<script src="app.js"></script></body></html>
