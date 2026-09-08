@@ -1,127 +1,28 @@
-const seedEvents = [
-  {
-    id:'barrys-pura', title:"Barry's UES → Pura Vida", desc:"11AM class, then grabbing Pura Vida after. Come for one or both.", when:'SAT · 11:00 AM', place:"Barry's UES", organizer:'Alex Cook', initials:'AC', path:['You','Grant','Alex'], degree:2, people:['Alex','Grant','Hannah','Jess'], joined:false, pin:null,
-    messages:[{name:'Alex',text:'Booked 11AM. Pura Vida right after.'},{name:'Grant',text:"I may skip Barry's and meet you guys after 😂"}]
-  },
-  {
-    id:'sheepshead', title:'Sheepshead Bay day', desc:'Heading out around noon. Bring a blanket, snacks and sunscreen. Let’s hang.', when:'TODAY · 12:00 PM', place:'Sheepshead Bay', organizer:'Alex Cook', initials:'AC', path:['You','Marney','Grant','Alex'], degree:3, people:['Alex','Marney','Sofia','Nina','Ben'], joined:false, pin:'Sheepshead Bay — left side of the main lawn',
-    messages:[{name:'Alex',text:'I’m wearing a yellow shirt. We’re to the left of the trees.'}]
-  },
-  {
-    id:'moma', title:'MoMA after hours', desc:'Going around 6:30 Thursday. Dinner nearby after if people are feeling it.', when:'THU · 6:30 PM', place:'MoMA', organizer:'Jessica Lee', initials:'JL', path:['You','Caroline','Jessica'], degree:2, people:['Jessica','Caroline','Priya','Maya','Tom','Ari'], joined:false, pin:null,
-    messages:[{name:'Jessica',text:'I’ll send the exact entrance once I’m there.'}]
-  }
+const INTERESTS=['Faith','Food & Brunch','Fitness','Sports','Parents','Arts & Culture','Medical Community','Students','Volunteering','Gaming','Outdoors','Music','Nightlife','Wellness','Professional','Neighborhood','Travel','Books & Ideas'];
+const seedEvents=[
+{id:'afton-church',title:'Church → Boozy Brunch',desc:'Church Sunday morning, then going to boozy brunch after. Come for either or both.',when:'SUN · 10:30 AM',place:'Upper East Side',organizer:'Afton',initials:'AF',path:['You','Marney','Afton'],degree:2,people:['Afton','Claire','Megan','Tori','James','Emily','Will'],joined:false,pin:null,tags:['Faith','Food & Brunch'],messages:[{name:'Afton',text:'Going to church first and brunch right after. Join for either!'}]},
+{id:'barrys-pura',title:"Barry's UES → Pura Vida",desc:'11AM class, then grabbing Pura Vida after. Come for one or both.',when:'SAT · 11:00 AM',place:"Barry's UES",organizer:'Alex Cook',initials:'AC',path:['You','Grant','Alex'],degree:2,people:['Alex','Grant','Hannah','Jess'],joined:false,pin:null,tags:['Fitness','Food & Brunch'],messages:[{name:'Alex',text:'Booked 11AM. Pura Vida right after.'}]},
+{id:'doctors-run',title:'Central Park Run → Coffee',desc:'Residents, fellows and friends doing an easy loop, coffee afterward.',when:'SUN · 9:00 AM',place:'Central Park',organizer:'Priya Shah',initials:'PS',path:['You','Marney','Priya'],degree:2,people:['Priya','Nina','David','Sam','Leah'],joined:false,pin:null,tags:['Medical Community','Fitness','Wellness'],messages:[]},
+{id:'ues-moms',title:'UES Moms Dinner',desc:'Husbands are traveling. Getting dinner Thursday — new faces very welcome.',when:'THU · 7:00 PM',place:'Upper East Side',organizer:'Caroline',initials:'CA',path:['You','Marney','Caroline'],degree:2,people:['Caroline','Jessica','Rachel','Kate'],joined:false,pin:null,tags:['Parents','Food & Brunch','Neighborhood'],messages:[]},
+{id:'grad-rooftop',title:'Met Rooftop → Drinks',desc:'A few Columbia, NYU and Fordham grad students. Bringing friends is the point.',when:'FRI · 5:30 PM',place:'The Met',organizer:'Sofia',initials:'SO',path:['You','Hannah','Sofia'],degree:2,people:['Sofia','Luis','Ana','Ben','Maya','Dev'],joined:false,pin:null,tags:['Students','Arts & Culture'],messages:[]},
+{id:'yankees',title:"Yankees → Billy's",desc:"Meeting upstairs at Billy's before the game. Come even if you're sitting elsewhere.",when:'FRI · 5:00 PM',place:"Billy's Sports Bar",organizer:'Grant',initials:'GG',path:['You','Grant'],degree:1,people:['Grant','Alex','Mikey','Dan'],joined:false,pin:null,tags:['Sports','Food & Brunch'],messages:[]},
+{id:'moma',title:'MoMA After Hours',desc:'Going around 6:30 Thursday. Dinner nearby after if people are feeling it.',when:'THU · 6:30 PM',place:'MoMA',organizer:'Jessica Lee',initials:'JL',path:['You','Caroline','Jessica'],degree:2,people:['Jessica','Caroline','Priya','Maya','Tom','Ari'],joined:false,pin:null,tags:['Arts & Culture'],messages:[]},
+{id:'volunteer',title:'Food Pantry → Lunch',desc:'Helping out Sunday afternoon, then grabbing a casual lunch nearby.',when:'SUN · 12:00 PM',place:'West Side Campaign Against Hunger',organizer:'Marney',initials:'MA',path:['You','Marney'],degree:1,people:['Marney','Sarah','Jo'],joined:false,pin:null,tags:['Volunteering','Neighborhood'],messages:[]},
+{id:'gaming',title:'PS5 Night',desc:'FC tournament at my place. Pizza. Zero skill requirement.',when:'SAT · 8:00 PM',place:'Upper West Side',organizer:'James',initials:'JA',path:['You','Falconi','James'],degree:2,people:['James','Falconi','Chris'],joined:false,pin:null,tags:['Gaming'],messages:[]},
+{id:'tennis',title:'Riverside Tennis → Drinks',desc:'Playing doubles at 3. A few people hanging afterward.',when:'SAT · 3:00 PM',place:'Riverside Park',organizer:'Hannah',initials:'HA',path:['You','Marney','Hannah'],degree:2,people:['Hannah','Alex','Tori','Nick'],joined:false,pin:null,tags:['Sports','Outdoors'],messages:[]},
+{id:'books',title:'Bookstore Browse → Coffee',desc:'Going to browse for an hour, then coffee. Talking books encouraged.',when:'SUN · 2:00 PM',place:'McNally Jackson',organizer:'Daniel',initials:'DA',path:['You','Grant','Daniel'],degree:2,people:['Daniel','Sara','Owen'],joined:false,pin:null,tags:['Books & Ideas','Neighborhood'],messages:[]}
 ];
-
-let events = JSON.parse(localStorage.getItem('in-network-events') || 'null') || seedEvents;
-const feed = document.querySelector('#feed');
-const template = document.querySelector('#eventCardTemplate');
-const eventDialog = document.querySelector('#eventDialog');
-const eventDetail = document.querySelector('#eventDetail');
-const createDialog = document.querySelector('#createDialog');
-const save = () => localStorage.setItem('in-network-events', JSON.stringify(events));
-
-function renderFeed(){
-  feed.innerHTML='';
-  events.forEach(event=>{
-    const node=template.content.cloneNode(true);
-    node.querySelector('.event-time').textContent=event.when;
-    node.querySelector('.distance').textContent=`${event.degree}° FROM YOU`;
-    node.querySelector('.event-title').textContent=event.title;
-    node.querySelector('.event-desc').textContent=event.desc;
-    node.querySelector('.organizer').textContent=event.organizer;
-    node.querySelector('.avatar').textContent=event.initials;
-    node.querySelector('.connection').textContent=`How you're IN: ${event.path.join(' → ')}`;
-    node.querySelector('.attendees').textContent=`${event.people.length} PEOPLE IN · ${event.people.slice(0,4).join(' · ')}${event.people.length>4?' + more':''}`;
-    const join=node.querySelector('.join-btn');
-    join.textContent=event.joined?'YOU’RE IN':"I'M IN";
-    if(event.joined) join.classList.add('joined');
-    join.addEventListener('click',()=>joinEvent(event.id));
-    node.querySelector('.details-btn').addEventListener('click',()=>openEvent(event.id));
-    feed.appendChild(node);
-  });
-}
-
-function joinEvent(id){
-  const event=events.find(e=>e.id===id);
-  if(!event.joined){
-    event.joined=true;
-    if(!event.people.includes('You')) event.people.push('You');
-    event.messages.push({name:'IN',text:'You joined this IN. The private chat is now open.'});
-    save(); renderFeed();
-  }
-  openEvent(id);
-}
-
-function openEvent(id){
-  const event=events.find(e=>e.id===id);
-  eventDetail.innerHTML=`
-    <div class="detail-head"><div class="eyebrow">IN</div><button class="icon-btn" id="closeEvent">×</button></div>
-    <div class="event-meta"><span>${event.when}</span><span>${event.degree}° FROM YOU</span></div>
-    <h2 class="detail-title">${event.title}</h2>
-    <p class="event-desc">${event.desc}</p>
-    <div class="trust-box"><div class="section-kicker">HOW YOU'RE IN</div><div class="trust-path">${event.path.join(' → ')}</div></div>
-    <div class="participant-list">${event.people.map(p=>`<span class="person-chip">${p}</span>`).join('')}</div>
-    ${event.joined ? joinedView(event) : `<button class="primary wide" id="detailJoin">I'M IN</button>`}
-  `;
-  eventDialog.showModal();
-  document.querySelector('#closeEvent').onclick=()=>eventDialog.close();
-  const detailJoin=document.querySelector('#detailJoin'); if(detailJoin) detailJoin.onclick=()=>joinEvent(event.id);
-  wireJoinedActions(event);
-}
-
-function joinedView(event){
-  return `
-    <div class="pin-box">
-      <div class="section-kicker">MEETING POINT</div>
-      ${event.pin ? `<div class="pin-live"><span class="dot"></span> PIN LIVE</div><h3>${event.pin}</h3>` : `<h3>${event.place}</h3><div class="tiny">Organizer has not dropped a live arrival pin yet.</div>`}
-      ${event.organizer==='You' ? `<button class="ghost" id="dropPin">${event.pin?'UPDATE PIN':'DROP LIVE PIN'}</button>`:''}
-    </div>
-    <div class="chat-box">
-      <div class="section-kicker">PRIVATE IN CHAT</div>
-      <div class="chat-log">${event.messages.map(m=>`<div class="msg"><strong>${m.name}</strong>${m.text}</div>`).join('')}</div>
-      <div class="chat-compose"><input id="chatInput" placeholder="Ask where they are, what to bring, hype it up…"><button class="primary" id="sendChat">SEND</button></div>
-    </div>
-    <div class="stay-box">
-      <div class="section-kicker">AFTER YOU GO</div>
-      <h3>Want to stay directly IN with someone you met?</h3>
-      <div class="post-actions">${event.people.filter(p=>p!=='You').slice(0,4).map(p=>`<div class="request-row"><span>${p}</span><button class="ghost stay-btn" data-person="${p}">STAY IN</button></div>`).join('')}</div>
-      <div class="tiny">Direct IN requests are private and only connect when both people choose it.</div>
-    </div>`;
-}
-
-function wireJoinedActions(event){
-  const send=document.querySelector('#sendChat');
-  if(send) send.onclick=()=>{
-    const input=document.querySelector('#chatInput');
-    if(!input.value.trim()) return;
-    event.messages.push({name:'You',text:input.value.trim()}); save(); openEvent(event.id);
-  };
-  const pin=document.querySelector('#dropPin');
-  if(pin) pin.onclick=()=>{
-    const value=prompt('Where exactly should everyone meet?', event.pin || event.place);
-    if(value){event.pin=value; event.messages.push({name:'IN',text:`Live pin updated: ${value}`}); save(); openEvent(event.id);}
-  };
-  document.querySelectorAll('.stay-btn').forEach(btn=>btn.onclick=()=>{
-    btn.textContent='REQUESTED'; btn.disabled=true;
-  });
-}
-
-document.querySelector('#createOpen').onclick=()=>createDialog.showModal();
-document.querySelector('#createForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const text=document.querySelector('#planText').value.trim();
-  const whenRaw=document.querySelector('#planWhen').value;
-  const place=document.querySelector('#planPlace').value.trim();
-  const radius=Number(document.querySelector('#planRadius').value);
-  if(!text||!whenRaw||!place) return;
-  const dt=new Date(whenRaw);
-  const when=dt.toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'}).toUpperCase();
-  const title=text.split(/[.!?]/)[0].slice(0,58);
-  const event={id:`in-${Date.now()}`,title,desc:text,when,place,organizer:'You',initials:'YOU',path:['You'],degree:0,people:['You'],joined:true,pin:null,messages:[{name:'You',text:text}]};
-  events.unshift(event); save(); renderFeed(); createDialog.close(); document.querySelector('#createForm').reset(); openEvent(event.id);
-});
-
-eventDialog.addEventListener('click',e=>{if(e.target===eventDialog) eventDialog.close();});
-createDialog.addEventListener('click',e=>{if(e.target===createDialog) createDialog.close();});
-renderFeed();
+let events=JSON.parse(localStorage.getItem('in-network-events-v2')||'null')||seedEvents;
+let selectedInterests=new Set(JSON.parse(localStorage.getItem('in-network-interests')||'[]'));
+let createTags=new Set();
+const feed=document.querySelector('#feed'),template=document.querySelector('#eventCardTemplate'),eventDialog=document.querySelector('#eventDialog'),eventDetail=document.querySelector('#eventDetail'),createDialog=document.querySelector('#createDialog');
+const save=()=>localStorage.setItem('in-network-events-v2',JSON.stringify(events));
+function tagHTML(tags=[]){return tags.map(t=>`<span class="interest-pill small">${t}</span>`).join('')}
+function renderInterestControls(){const box=document.querySelector('#interestFilters');box.innerHTML=INTERESTS.map(i=>`<button class="interest-pill ${selectedInterests.has(i)?'active':''}" data-interest="${i}">${i}</button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>{selectedInterests.has(b.dataset.interest)?selectedInterests.delete(b.dataset.interest):selectedInterests.add(b.dataset.interest);localStorage.setItem('in-network-interests',JSON.stringify([...selectedInterests]));renderInterestControls();renderFeed()});const create=document.querySelector('#createInterests');create.innerHTML=INTERESTS.map(i=>`<button type="button" class="interest-pill ${createTags.has(i)?'active':''}" data-create-interest="${i}">${i}</button>`).join('');create.querySelectorAll('button').forEach(b=>b.onclick=()=>{createTags.has(b.dataset.createInterest)?createTags.delete(b.dataset.createInterest):createTags.add(b.dataset.createInterest);renderInterestControls()})}
+function rankedEvents(){if(!selectedInterests.size)return events;return [...events].sort((a,b)=>b.tags.filter(t=>selectedInterests.has(t)).length-a.tags.filter(t=>selectedInterests.has(t)).length)}
+function renderFeed(){feed.innerHTML='';rankedEvents().forEach(event=>{const node=template.content.cloneNode(true);node.querySelector('.event-time').textContent=event.when;node.querySelector('.distance').textContent=`${event.degree}° FROM YOU`;node.querySelector('.event-tags').innerHTML=tagHTML(event.tags);node.querySelector('.event-title').textContent=event.title;node.querySelector('.event-desc').textContent=event.desc;node.querySelector('.organizer').textContent=event.organizer;node.querySelector('.avatar').textContent=event.initials;node.querySelector('.connection').textContent=`How you're IN: ${event.path.join(' → ')}`;node.querySelector('.attendees').textContent=`${event.people.length} PEOPLE IN · ${event.people.slice(0,4).join(' · ')}${event.people.length>4?' + more':''}`;const join=node.querySelector('.join-btn');join.textContent=event.joined?'YOU’RE IN':"I'M IN";if(event.joined)join.classList.add('joined');join.onclick=()=>joinEvent(event.id);node.querySelector('.details-btn').onclick=()=>openEvent(event.id);feed.appendChild(node)})}
+function joinEvent(id){const event=events.find(e=>e.id===id);if(!event.joined){event.joined=true;if(!event.people.includes('You'))event.people.push('You');event.messages.push({name:'IN',text:'You joined this IN. The private chat is now open.'});save();renderFeed()}openEvent(id)}
+function openEvent(id){const event=events.find(e=>e.id===id);eventDetail.innerHTML=`<div class="detail-head"><div class="eyebrow">IN</div><button class="icon-btn" id="closeEvent">×</button></div><div class="event-meta"><span>${event.when}</span><span>${event.degree}° FROM YOU</span></div><div class="event-tags">${tagHTML(event.tags)}</div><h2 class="detail-title">${event.title}</h2><p class="event-desc">${event.desc}</p><div class="trust-box"><div class="section-kicker">HOW YOU'RE IN</div><div class="trust-path">${event.path.join(' → ')}</div></div><div class="participant-list">${event.people.map(p=>`<span class="person-chip">${p}</span>`).join('')}</div>${event.joined?joinedView(event):`<button class="primary wide" id="detailJoin">I'M IN</button>`}`;eventDialog.showModal();document.querySelector('#closeEvent').onclick=()=>eventDialog.close();const j=document.querySelector('#detailJoin');if(j)j.onclick=()=>joinEvent(event.id);wireJoinedActions(event)}
+function joinedView(event){return `<div class="pin-box"><div class="section-kicker">MEETING POINT</div>${event.pin?`<div class="pin-live"><span class="dot"></span> PIN LIVE</div><h3>${event.pin}</h3>`:`<h3>${event.place}</h3><div class="tiny">Organizer has not dropped a live arrival pin yet.</div>`}${event.organizer==='You'?`<button class="ghost" id="dropPin">${event.pin?'UPDATE PIN':'DROP LIVE PIN'}</button>`:''}</div><div class="chat-box"><div class="section-kicker">PRIVATE IN CHAT</div><div class="chat-log">${event.messages.map(m=>`<div class="msg"><strong>${m.name}</strong>${m.text}</div>`).join('')}</div><div class="chat-compose"><input id="chatInput" placeholder="Where are you? What should I bring?"><button class="primary" id="sendChat">SEND</button></div></div><div class="stay-box"><div class="section-kicker">AFTER YOU GO</div><h3>Want to stay directly IN with someone you met?</h3><div class="post-actions">${event.people.filter(p=>p!=='You').slice(0,6).map(p=>`<div class="request-row"><span>${p}</span><button class="ghost stay-btn">STAY IN</button></div>`).join('')}</div><div class="tiny">Private. A direct connection forms only when both people choose it.</div></div>`}
+function wireJoinedActions(event){const send=document.querySelector('#sendChat');if(send)send.onclick=()=>{const input=document.querySelector('#chatInput');if(!input.value.trim())return;event.messages.push({name:'You',text:input.value.trim()});save();openEvent(event.id)};const pin=document.querySelector('#dropPin');if(pin)pin.onclick=()=>{const v=prompt('Where exactly should everyone meet?',event.pin||event.place);if(v){event.pin=v;event.messages.push({name:'IN',text:`Live pin updated: ${v}`});save();openEvent(event.id)}};document.querySelectorAll('.stay-btn').forEach(b=>b.onclick=()=>{b.textContent='REQUESTED';b.disabled=true})}
+document.querySelector('#clearInterests').onclick=()=>{selectedInterests.clear();localStorage.setItem('in-network-interests','[]');renderInterestControls();renderFeed()};document.querySelector('#createOpen').onclick=()=>createDialog.showModal();document.querySelector('#createForm').addEventListener('submit',e=>{e.preventDefault();const text=document.querySelector('#planText').value.trim(),whenRaw=document.querySelector('#planWhen').value,place=document.querySelector('#planPlace').value.trim(),radius=Number(document.querySelector('#planRadius').value);if(!text||!whenRaw||!place)return;const dt=new Date(whenRaw),when=dt.toLocaleString([],{weekday:'short',hour:'numeric',minute:'2-digit'}).toUpperCase();const tags=[...createTags];const event={id:`in-${Date.now()}`,title:text.split(/[.!?]/)[0].slice(0,58),desc:text,when,place,organizer:'You',initials:'YOU',path:['You'],degree:0,people:['You'],joined:true,pin:null,tags:tags.length?tags:['Neighborhood'],messages:[{name:'You',text}]};events.unshift(event);save();renderFeed();createDialog.close();document.querySelector('#createForm').reset();createTags.clear();renderInterestControls();openEvent(event.id)});eventDialog.addEventListener('click',e=>{if(e.target===eventDialog)eventDialog.close()});createDialog.addEventListener('click',e=>{if(e.target===createDialog)createDialog.close()});renderInterestControls();renderFeed();
